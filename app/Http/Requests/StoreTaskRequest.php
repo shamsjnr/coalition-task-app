@@ -23,6 +23,7 @@ class StoreTaskRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
+            'date' => ['required', 'date'],
             'priority' => ['required', 'in:HIGH,MEDIUM,LOW']
         ];
     }

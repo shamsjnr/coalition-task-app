@@ -5,17 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use Illuminate\Support\Facades\Request;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($project='')
     {
+        if ($project)
+            $tasks = Task::where('project_id', $project)->with('project')->orderBy('rank', 'ASC')->get();
+        else
+            $tasks = Task::with('project')->orderBy('rank', 'ASC')->get();
+
         $data = [
-            'tasks' => Task::all()
+            'tasks' => $tasks
         ];
 
         return view('tasks', $data);
@@ -42,6 +46,7 @@ class TaskController extends Controller
 
         $task = new Task;
         $task->name = $request->name;
+        $task->dated = $request->date;
         $task->priority = $request->priority;
         $task->rank = $next_rank;
         $task->save();
@@ -58,7 +63,22 @@ class TaskController extends Controller
     }
 
     function reorder(Task $task) {
+        $rank = request()->input('rank');
+        $last_rank = Task::orderBy('rank', 'DESC')->first()?->rank;
 
+        if ($rank == -1) $rank = $last_rank;
+
+        $min_max = [min([$rank, $task->rank]), max([$rank, $task->rank])];
+
+        // Reorder task ranks..
+        if ($rank < $task->rank)
+            Task::whereBetween('rank', $min_max)->where('rank', '>=', $rank)->whereNot('id', $task->id)->increment('rank');
+        else
+            Task::whereBetween('rank', $min_max)->where('rank', '<=', $rank)->whereNot('id', $task->id)->decrement('rank');
+
+        $task->rank = $rank;
+        $task->save();
+        return response(['status'=>'Reordered'], 200);
     }
 
     /**
@@ -80,6 +100,7 @@ class TaskController extends Controller
 
         // Update record with new values
         $task->name = $request->name;
+        $task->dated = $request->date;
         $task->priority = $request->priority;
         $task->save();
 
@@ -92,7 +113,7 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         // Rearrange tasks order...
-        $tasks = Task::where('rank', '>', $task->rank)->decrement('rank');
+        Task::where('rank', '>', $task->rank)->decrement('rank');
 
         // Delete the record
         $task->delete();

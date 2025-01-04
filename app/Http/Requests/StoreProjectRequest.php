@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTaskRequest extends FormRequest
+class StoreProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,11 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'date' => ['required', 'date'],
-            'priority' => ['required', 'in:HIGH,MEDIUM,LOW']
+            'name' => 'required|string|min:3|unique:projects,name'
         ];
+    }
+
+    function messages() {
+        return ['name.unique' => 'The Project name already exist'];
     }
 }
