@@ -34,4 +34,17 @@ window.addEventListener('load', function() {
             flash.remove();
         }, 5000); // Remove message after 5 seconds
     }
+
+    // Checkboxes
+    const addBtn = document.querySelector('#addToProject');
+    const tasksInput = document.querySelector('#tasks');
+    document.querySelectorAll('.project-task')?.forEach(checkbox => {
+        checkbox.addEventListener('change', e => {
+            const checks = document.querySelectorAll('.project-task:checked');
+            (checks?.length) ? addBtn.classList.remove('hidden') : addBtn.classList.add('hidden');
+
+            const tasks = Array.from(checks)?.flatMap(check => check.value);
+            tasksInput.value = tasks
+        });
+    });
 });

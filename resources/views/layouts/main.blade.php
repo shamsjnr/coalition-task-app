@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>{{ config('app.name') }}</title>
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -26,27 +27,9 @@
             {{ session('message') }}
         </div>
     @endif
-        <div class="grid grid-cols-[1fr_300px]">
-            <div class="border w-full max-w-xl bg-white/80 shadow-2xl sm:mt-6 mx-auto pt-4 pb-5 px-5">
+        <div class="">
+            <div class="border w-full max-w-2xl bg-white/80 shadow-2xl sm:mt-6 mx-auto pt-4 pb-5 px-5">
                 @yield('main')
-            </div>
-            <div class="border-s p-4 px-6">
-                <h4 class="text-xl">Projects</h4>
-                <div class="flex flex-cols">
-
-                </div>
-            </div>
-        </div>
-        <div id="taskModal" class="modal @error('name') show @enderror">
-            <span class="absolute top-0 right-2 p-2 text-red-600 text-3xl cursor-pointer" data-hide-modal="taskModal">&times;</span>
-            <div class="modal-dialog bg-white/90 dark:bg-gray-800/20">
-                @include('includes.task');
-            </div>
-        </div>
-        <div id="projectModal" class="modal @error('name') show @enderror">
-            <span class="absolute top-0 right-2 p-2 text-red-600 text-3xl cursor-pointer" data-hide-modal="taskModal">&times;</span>
-            <div class="modal-dialog bg-white/90 dark:bg-gray-800/20">
-                @include('includes.project');
             </div>
         </div>
     </body>
