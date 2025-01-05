@@ -17,7 +17,7 @@
             <input type="date" name="date" id="date" class="w-full py-3 px-4 outline-none border-2" />
         </div>
         <div class="group flex flex-col gap-1">
-            <label for="name">Priority:</label>
+            <label for="priority">Priority:</label>
             <select name="priority" id="priority" class="w-full pt-4 pb-3 px-4 outline-none border-2">
                 <option value="HIGH">HIGH</option>
                 <option value="MEDIUM" selected>MEDIUM</option>

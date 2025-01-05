@@ -14,7 +14,7 @@ class ProjectController extends Controller
     public function index()
     {
         $data = [
-            'projects' => Project::all()
+            'projects' => Project::with('tasks')->get()
         ];
 
         return view('projects', $data);

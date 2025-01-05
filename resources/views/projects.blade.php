@@ -15,6 +15,9 @@
     <div class="py-3 px-4 pe-2 border flex justify-between items-center gap-3 rounded-lg">
         <div class="flex items-center gap-3">
             <span>{{ $project->name }}</span>
+            <span class="border border-amber-400 rounded-md text-sm py-1 px-2">
+                {{ count($project->tasks) }} Task{{ count($project->tasks) === 1 ? '' : 's' }}
+            </span>
         </div>
         <div>
             <a href="{{ route('home', $project->id) }}" class="text-sm bg-gray-50 border py-2 px-4">View Tasks</a>

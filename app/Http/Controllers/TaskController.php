@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Project;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -19,7 +21,8 @@ class TaskController extends Controller
             $tasks = Task::with('project')->orderBy('rank', 'ASC')->get();
 
         $data = [
-            'tasks' => $tasks
+            'tasks' => $tasks,
+            'projects' => Project::all()
         ];
 
         return view('tasks', $data);
@@ -54,12 +57,17 @@ class TaskController extends Controller
         return back()->with(['status'=>'success', 'message'=>'Task Added']);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Task $task)
+    public function addtoproject(Request $request)
     {
-        //
+        $request->validate([
+            'project' => 'required|exists:projects,id',
+            'tasks' => 'required|string'
+        ]);
+
+        $tasks = explode(',', $request->input('tasks')); // Need to explode as input is NOT an array
+
+        Task::whereIn('id', $tasks)->update(['project_id' => $request->project]);
+        return back()->with(['status'=>'success', 'message'=>'Task(s) added to Project']);
     }
 
     function reorder(Task $task) {
