@@ -22,7 +22,8 @@ class TaskController extends Controller
 
         $data = [
             'tasks' => $tasks,
-            'projects' => Project::all()
+            'projects' => Project::all(),
+            'project' => $project ? Project::find($project)?->name : null
         ];
 
         return view('tasks', $data);
