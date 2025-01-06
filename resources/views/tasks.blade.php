@@ -11,7 +11,7 @@
 
 @section('main')
 <div class="flex justify-between items-center">
-    <h3 class="text-xl">All Tasks</h3>
+    <h3 class="text-xl">{{ $project ? "({$project}) Tasks" : 'All Tasks' }}</h3>
     <div class="flex gap-4 items-center">
         <a href="{{ route('project.create') }}" class="text-blue-700 underline">Projects</a>
         <button class="bg-amber-400 py-2 px-4 rounded-3xl hover:shadow-md transition-all" data-show-modal="taskModal">
@@ -32,10 +32,11 @@
 <div class="sortable-list flex flex-col gap-1 pt-3">
 @forelse ($tasks as $task)
     <div
-        class="py-3 px-4 pe-2 border flex justify-between items-center gap-3 rounded-lg item"
-        draggable="true"
+        class="py-3 px-4 pe-2 border flex justify-between items-center gap-3 select-none rounded-lg item {{ ! $project ? 'cursor-grab' : '' }}"
+        draggable="{{ $project ? 'false' : 'true' }}"
         data-rank="{{ $task->rank }}"
         data-url="{{ route('task.order', [$task->id]) }}"
+        data-id="task-{{ $task->id }}"
     >
         <div class="flex items-center gap-3">
             <input type="checkbox" class="project-task w-5 h-5" value="{{ $task->id }}" />

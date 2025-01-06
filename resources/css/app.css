@@ -37,10 +37,6 @@
     }
 }
 
-.item {
-    cursor: grabbing;
-}
-
 .item.dragging :where(span) {
   opacity: 0;
 }

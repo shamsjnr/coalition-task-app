@@ -11,7 +11,7 @@ window.addEventListener('load', function() {
     items?.forEach(item => {
         item.addEventListener("dragstart", () => {
 
-            oldRank = Number(item.dataset.rank) + 1; // Set the current rank
+            oldRank = Number(item.dataset.rank); // Set the current rank
 
             // Adding dragging class to item after a delay
             setTimeout(() => item.classList.add("dragging"), 0);
@@ -21,13 +21,13 @@ window.addEventListener('load', function() {
             item.classList.remove("dragging");
 
             const parent = item.parentNode;
-            let newRank = Array.prototype.indexOf.call(parent.children, item); // Get the new rank from drag (-1 denotes the last rank)
+            let newRank = Array.prototype.indexOf.call(parent.children, item);
             newRank = Number(newRank) + 1;
 
-            if ( Number(newRank) !== oldRank ) {
-                newRank = newRank || -1;
+            if ( Number(newRank) !== Number(oldRank) ) {
+                newRank = newRank || -1; // Set the new rank from drag (-1 denotes the last rank)
                 const token = document.querySelector('meta[name="csrf-token"]').content
-                await fetch (`${item.dataset.url}`, {
+                const request = await fetch (`${item.dataset.url}`, {
                     method: 'PUT',
                     headers: {
                         'X-CSRF-TOKEN': token,
@@ -35,6 +35,13 @@ window.addEventListener('load', function() {
                     },
                     body: JSON.stringify({ rank: newRank })
                 });
+
+                if ( ! request.ok ) return;
+
+                const response = await request.json();
+                if (response?.status === 'Reordered') {
+                    reorder();
+                }
             }
         });
     });
@@ -54,4 +61,12 @@ window.addEventListener('load', function() {
     }
     sortableList?.addEventListener("dragover", initSortableList);
     sortableList?.addEventListener("dragenter", e => e.preventDefault());
+
+    const reorder = () => {
+        let i = 1;
+        document.querySelectorAll('.item')?.forEach(task => {
+            task.dataset.rank = i; // Update Task ranks
+            i++;
+        });
+    }
 });
