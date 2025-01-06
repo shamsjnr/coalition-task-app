@@ -35,18 +35,22 @@
     ``` cmd
     php artisan migrate
     ```
-- Start the application if everything so far has been succcessful
+- Install Node.js dependencies
     ``` cmd
-    php artisan serve
-    ```
-*For development, you will be needing the node.js environment:*
-- Start the Node.js environment
-    ``` cmd
-    npm run dev
+    npm install
     ```
 - Build assets for production
     ``` cmd
     npm run build
+    ```
+- Start the application if everything so far has been succcessful
+    ``` cmd
+    php artisan serve
+    ```
+*For development:*
+- Start the Node.js develppment environment
+    ``` cmd
+    npm run dev
     ```
 
 *In case of an error with the project setup, you can always look-up the [laravel installation documentation](https://laravel.com/docs/11.x/installation)*
